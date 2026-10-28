@@ -1,0 +1,30 @@
+# blutter 反编译 nexbot_client 协议类提取
+# 源: blutter_out/asm/nexbot_client/src/protocol/*.dart
+
+## chat_completion_message.dart
+classes : MyCompletionMessage, _MyCompletionMessageImpl
+strings : content, role, contentList
+
+## chat_completion_message_content.dart
+classes : MessageContent, _MessageContentImpl
+strings : type, text, imageUrl, url
+
+## chat_completion_message_content_image_url.dart
+classes : MessageContentImageUrl, _MessageContentImageUrlImpl
+strings : url
+
+## chat_completion_request.dart
+classes : MyCompletionRequest, _MyCompletionRequestImpl
+strings : model, system, messages, length, secret
+
+## chat_completion_response.dart
+classes : MyCompletionResponse, _MyCompletionResponseImpl
+strings : content
+
+## client.dart
+classes : Client, EndpointChatCompletion
+strings : chatCompletion
+
+## protocol.dart
+classes : Protocol
+strings : className, MyCompletionMessage, data, MessageContent, MessageContentImageUrl, MyCompletionRequest, MyCompletionResponse

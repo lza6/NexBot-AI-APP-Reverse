@@ -1,0 +1,106 @@
+[
+  {
+    "url": "https://app.nexbot.ai/",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/splash/img/light-2x.png",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/flutter_bootstrap.js",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/manifest.json",
+    "method": "GET"
+  },
+  {
+    "url": "https://www.gstatic.com/flutter-canvaskit/052f31d115eceda8cbff1b3481fcde4330c4ae12/chromium/canvaskit.wasm",
+    "method": "GET"
+  },
+  {
+    "url": "https://www.gstatic.com/flutter-canvaskit/052f31d115eceda8cbff1b3481fcde4330c4ae12/chromium/canvaskit.js",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/main.dart.js",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/favicon.png",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/assets/FontManifest.json",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/assets/fonts/MaterialIcons-Regular.otf",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/assets/packages/icons_plus/assets/fonts/AntDesign.ttf",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/assets/packages/icons_plus/assets/fonts/Bootstrap.ttf",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/assets/packages/icons_plus/assets/fonts/BoxIcons.ttf",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/assets/packages/icons_plus/assets/fonts/Clarity.ttf",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/assets/packages/icons_plus/assets/fonts/EvaIcons.ttf",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/assets/packages/icons_plus/assets/fonts/FontAwesome.ttf",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/assets/packages/icons_plus/assets/fonts/HeroIcons.ttf",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/assets/packages/icons_plus/assets/fonts/Iconsax.ttf",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/assets/packages/icons_plus/assets/fonts/IonIcons.ttf",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/assets/packages/icons_plus/assets/fonts/LineAwesome.ttf",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/assets/packages/icons_plus/assets/fonts/MingCute.ttf",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/assets/packages/icons_plus/assets/fonts/OctIcons.ttf",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/assets/packages/icons_plus/assets/fonts/PixelArtIcons.ttf",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/assets/packages/icons_plus/assets/fonts/TeenyIcons.ttf",
+    "method": "GET"
+  },
+  {
+    "url": "https://app.nexbot.ai/assets/packages/icons_plus/assets/fonts/ZondIcons.ttf",
+    "method": "GET"
+  },
+  {
+    "url": "https://fonts.gstatic.com/s/roboto/v32/KFOmCnqEu92Fr1Me4GZLCzYlKw.woff2",
+    "method": "GET"
+  }
+]

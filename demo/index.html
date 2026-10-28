@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NexBot 协议复刻 Demo</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --panel: #141821;
+    --line: #232a36;
+    --fg: #e6e9ef;
+    --dim: #8b96a8;
+    --accent: #7c5cff;
+    --ok: #2ecc71;
+    --warn: #f0b429;
+    --err: #ff5c5c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 14px/1.6 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  header {
+    padding: 14px 18px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  header h1 { font-size: 15px; margin: 0; font-weight: 600; letter-spacing: .2px; }
+  .tag {
+    font-size: 11px; padding: 2px 8px; border-radius: 999px;
+    border: 1px solid var(--line); color: var(--dim);
+  }
+  .tag.warn { color: var(--warn); border-color: #4a3c14; }
+  main { display: grid; grid-template-columns: 1fr 420px; gap: 0; min-height: calc(100vh - 58px); }
+  @media (max-width: 980px) { main { grid-template-columns: 1fr; } }
+  #chat { padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+  .msg { display: flex; gap: 10px; }
+  .msg .who {
+    width: 34px; height: 34px; border-radius: 10px; flex: 0 0 34px;
+    display: grid; place-items: center; font-size: 12px; font-weight: 700;
+    background: #1d2230; color: var(--dim);
+  }
+  .msg.user .who { background: #1f2a3d; color: #8ab4ff; }
+  .msg.bot .who { background: #241f3d; color: #b9a8ff; }
+  .bubble {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    padding: 10px 14px; white-space: pre-wrap; word-break: break-word; flex: 1;
+  }
+  .bubble.err { border-color: #4a1f1f; color: #ffb3b3; }
+  #composer {
+    border-top: 1px solid var(--line); padding: 14px 18px;
+    display: flex; gap: 10px; align-items: flex-end;
+  }
+  textarea {
+    flex: 1; resize: none; min-height: 44px; max-height: 160px;
+    background: var(--panel); color: var(--fg); border: 1px solid var(--line);
+    border-radius: 10px; padding: 11px 13px; font: inherit; outline: none;
+  }
+  textarea:focus { border-color: #3a4560; }
+  button {
+    background: var(--accent); color: #fff; border: 0; border-radius: 10px;
+    padding: 11px 18px; font: inherit; font-weight: 600; cursor: pointer;
+  }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  aside {
+    border-left: 1px solid var(--line); padding: 16px; background: #0e1119;
+    display: flex; flex-direction: column; gap: 14px; overflow: auto;
+  }
+  aside h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .12em; color: var(--dim); margin: 0; }
+  .kv { display: grid; grid-template-columns: 120px 1fr; gap: 4px 10px; font-size: 12px; }
+  .kv div:nth-child(odd) { color: var(--dim); }
+  .kv div:nth-child(even) { font-variant-numeric: tabular-nums; }
+  pre {
+    background: #0a0d13; border: 1px solid var(--line); border-radius: 10px;
+    padding: 12px; font-size: 11.5px; line-height: 1.5; overflow: auto;
+    max-height: 320px; margin: 0; color: #b7c4d8;
+  }
+  .row { display: flex; gap: 8px; align-items: center; }
+  input[type="text"], input[type="number"] {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+    color: var(--fg); padding: 7px 10px; font: inherit; width: 100%;
+  }
+  .hint { font-size: 11.5px; color: var(--dim); }
+  .badge { font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<header>
+  <h1>NexBot 协议复刻 Demo</h1>
+  <span class="tag">com.nexbot.app 1.9.3</span>
+  <span class="tag warn">本地 mock · 非真实 AI</span>
+  <span class="tag" id="status">连接中…</span>
+</header>
+
+<main>
+  <div style="display:flex;flex-direction:column;min-height:0">
+    <div id="chat" style="flex:1;overflow:auto"></div>
+    <div id="composer">
+      <textarea id="input" placeholder="输入消息，Enter 发送（Shift+Enter 换行）"></textarea>
+      <button id="send">发送</button>
+    </div>
+  </div>
+
+  <aside>
+    <div>
+      <h2>服务端</h2>
+      <div class="row" style="margin:8px 0">
+        <input type="text" id="baseUrl" value="http://127.0.0.1:8787" />
+      </div>
+      <div class="row">
+        <button id="reconnect" style="padding:7px 12px;font-size:12px">重连</button>
+        <span class="hint" id="connHint"></span>
+      </div>
+    </div>
+
+    <div>
+      <h2>运行时</h2>
+      <div class="kv" style="margin-top:8px">
+        <div>deviceId</div><div id="kDevice">-</div>
+        <div>model</div><div id="kModel">-</div>
+        <div>额度剩余</div><div id="kCredits">-</div>
+        <div>上次耗时</div><div id="kLatency">-</div>
+        <div>流式</div><div id="kStream">-</div>
+      </div>
+    </div>
+
+    <div>
+      <h2>最后一次请求</h2>
+      <pre id="reqDump">—</pre>
+    </div>
+
+    <div>
+      <h2>最后一次响应</h2>
+      <pre id="resDump">—</pre>
+    </div>
+
+    <div>
+      <h2>说明</h2>
+      <p class="hint" style="margin:8px 0 0">
+        本页只与 <code>server/mock_serverpod.py</code> 通信。NexBot AI 的真实后端
+        (<code>nexbot.globeapp.dev</code> / Supabase) 已注销，此处展示的是从 APK 还原出的
+        协议形态，回复由本地桩函数生成。
+      </p>
+    </div>
+  </aside>
+</main>
+
+<script>
+const state = {
+  deviceId: 'dev-' + Math.random().toString(16).slice(2, 14),
+  model: null,
+  credits: null,
+  base: localStorage.getItem('nexbot.demo.base') || 'http://127.0.0.1:8787',
+};
+
+const el = (id) => document.getElementById(id);
+const chat = el('chat');
+
+function bubble(role, text, cls) {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg ' + role;
+  const who = document.createElement('div');
+  who.className = 'who';
+  who.textContent = role === 'user' ? 'YOU' : 'BOT';
+  const body = document.createElement('div');
+  body.className = 'bubble' + (cls ? ' ' + cls : '');
+  body.textContent = text;
+  wrap.append(who, body);
+  chat.append(wrap);
+  chat.scrollTop = chat.scrollHeight;
+  return body;
+}
+
+async function connect() {
+  state.base = el('baseUrl').value.replace(/\/$/, '');
+  localStorage.setItem('nexbot.demo.base', state.base);
+  el('status').textContent = '连接中…';
+  try {
+    const health = await fetch(state.base + '/health').then(r => r.json());
+    el('status').textContent = 'mock 在线';
+    el('status').style.color = 'var(--ok)';
+    el('connHint').textContent = 'req=' + health.stats.requests;
+
+    const reg = await fetch(state.base + '/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ deviceId: state.deviceId }),
+    }).then(r => r.json());
+
+    state.credits = reg.creditsLeft;
+    el('kDevice').textContent = reg.deviceId;
+    el('kCredits').textContent = reg.creditsLeft + ' / ' + reg.creditsDaily;
+
+    const cfg = await fetch(state.base + '/config/get', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: '{}',
+    }).then(r => r.json());
+    state.model = cfg.ai.model;
+    el('kModel').textContent = cfg.ai.model;
+  } catch (e) {
+    el('status').textContent = 'mock 离线';
+    el('status').style.color = 'var(--err)';
+    el('connHint').textContent = '先启动 server/mock_serverpod.py';
+  }
+}
+
+async function send() {
+  const text = el('input').value.trim();
+  if (!text) return;
+  el('input').value = '';
+  bubble('user', text, null);
+
+  const payload = {
+    model: state.model || 'gemini-3.5-flash-lite',
+    stream: true,
+    user: state.deviceId,
+    messages: [{ role: 'user', content: [{ type: 'text', text: text }] }],
+  };
+  el('reqDump').textContent = JSON.stringify(payload, null, 2);
+  el('resDump').textContent = '…';
+  el('kStream').textContent = 'SSE';
+
+  const body = bubble('bot', '');
+  const t0 = performance.now();
+  el('send').disabled = true;
+
+  try {
+    const res = await fetch(state.base + '/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      body.classList.add('err');
+      body.textContent = 'HTTP ' + res.status + ' · ' + (err.error?.message || 'unknown');
+      el('resDump').textContent = JSON.stringify(err, null, 2);
+      return;
+    }
+
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let buf = '';
+    let acc = '';
+    let last = null;
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split('\n');
+      buf = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if (!raw || raw === '[DONE]') continue;
+        try {
+          const chunk = JSON.parse(raw);
+          last = chunk;
+          const delta = chunk.choices?.[0]?.delta?.content;
+          if (delta) { acc += delta; body.textContent = acc; chat.scrollTop = chat.scrollHeight; }
+        } catch (_) { /* 忽略不完整分片 */ }
+      }
+    }
+    const ms = Math.round(performance.now() - t0);
+    el('kLatency').textContent = ms + ' ms';
+    el('resDump').textContent = JSON.stringify(last, null, 2);
+  } catch (e) {
+    body.classList.add('err');
+    body.textContent = '请求失败：' + e.message;
+  } finally {
+    el('send').disabled = false;
+  }
+}
+
+el('send').addEventListener('click', send);
+el('input').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+});
+el('reconnect').addEventListener('click', connect);
+el('baseUrl').value = state.base;
+connect();
+</script>
+</body>
+</html>

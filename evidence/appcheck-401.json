@@ -1,0 +1,8 @@
+{
+  "_note": "POST https://firebasevertexai.googleapis.com/v1beta/projects/nexbot-ai/models/gemini-2.5-flash-lite:generateContent 携带 x-goog-api-key（项目公开 web/Android key），不带 App Check token 的实测响应",
+  "error": {
+    "code": 401,
+    "message": "Firebase App Check token is invalid.",
+    "status": "UNAUTHENTICATED"
+  }
+}

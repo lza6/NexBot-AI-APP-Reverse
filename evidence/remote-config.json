@@ -1,0 +1,14 @@
+{
+  "_note": "GET/POST https://firebaseremoteconfig.googleapis.com/v1/projects/nexbot-ai/namespaces/firebase:fetch?key=<public client api key>，2026-10-29 实测响应原文",
+  "entries": {
+    "credit_daily_free": "2",
+    "gemini_llm_model": "gemini-3.5-flash-lite",
+    "maintenance_mode": "false",
+    "max_input_words": "3000",
+    "min_input_words": "50",
+    "min_build_number": "0",
+    "paywall_show_on_app_open": "true"
+  },
+  "state": "UPDATE",
+  "templateVersion": "46"
+}

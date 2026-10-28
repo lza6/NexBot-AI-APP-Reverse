@@ -1,0 +1,16 @@
+# 原始 APK 不入库
+*.apk
+*.xapk
+*.apks
+
+# 逆向中间产物
+apk_raw/
+blutter_out/
+*.so
+*.dex
+
+# 运行产物
+__pycache__/
+*.pyc
+node_modules/
+*.log

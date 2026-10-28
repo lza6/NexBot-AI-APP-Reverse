@@ -1,0 +1,9 @@
+# DNS-over-HTTPS resolution via dns.google, collected 2026-10-29
+# Status: 0=NOERROR (resolves), 3=NXDOMAIN (domain does not exist)
+#
+zlymralqctgzydksekht.supabase.co       Status=3 A=-
+globeapp.dev                           Status=3 A=-
+nexbot.globeapp.dev                    ERROR URLError
+core-server.globeapp.dev               Status=3 A=-
+nexbot.ai                              Status=0 A=188.114.96.1,188.114.97.1
+app.nexbot.ai                          Status=0 A=188.114.97.1,188.114.96.1

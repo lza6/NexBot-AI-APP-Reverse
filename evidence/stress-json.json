@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-10-28T22:40:19.343Z",
+  "target": "http://127.0.0.1:8787",
+  "mode": "json",
+  "concurrency": 20,
+  "plannedRequests": 600,
+  "executedRequests": 600,
+  "succeeded": 600,
+  "failed": 0,
+  "successRate": 1,
+  "wallMs": 3732,
+  "qps": 160.77,
+  "latencyMs": {
+    "count": 600,
+    "min": 120.5929,
+    "p50": 121.8194,
+    "p90": 123.0539,
+    "p95": 125.0243,
+    "p99": 157.6142,
+    "max": 159.7585,
+    "mean": 123
+  },
+  "errors": {},
+  "serverStats": {
+    "before": {
+      "requests": 0,
+      "errors": 0,
+      "devices": 0,
+      "charsOut": 0
+    },
+    "after": {
+      "requests": 600,
+      "errors": 0,
+      "devices": 600,
+      "charsOut": 93225
+    }
+  },
+  "note": "local protocol replica only — not a benchmark of the real NexBot backend"
+}
